@@ -1,4 +1,4 @@
-import { Guild, EmbedBuilder, TextChannel } from 'v'; // o 'discord.js' según tu importación
+import { Guild, EmbedBuilder, TextChannel } from 'discord.js';
 import { db } from '../db';
 import { detectedAdmins } from '../db/schema';
 import { eq } from 'drizzle-orm';
