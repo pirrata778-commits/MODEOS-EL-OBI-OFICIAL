@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --import tsx server/index.ts",
     "dev": "tsx watch server/index.ts",
-    "build": "vite build",
+    "build": "vite build client",
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
