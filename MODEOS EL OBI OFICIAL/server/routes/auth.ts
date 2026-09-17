@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Faltan credenciales requeridas (userId o token)' });
     }
 
-    const sessionId = `session_${Date.now()}_${Math.random().toString(36.substring(2, 9))}`;
+    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 horas de validez
 
     // Guardar o actualizar la sesión preservando estrictamente la tabla user_sessions
