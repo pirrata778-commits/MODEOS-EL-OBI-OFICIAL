@@ -1,0 +1,108 @@
+import React, { useEffect, useState } from 'react';
+
+export default function Dashboard() {
+  const [stats, setStats] = useState<any>(null);
+  const [guilds, setGuilds] = useState<any[]>([]);
+  const [admins, setAdmins] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [statusRes, guildsRes, adminsRes] = await Promise.all([
+          fetch('/api/status').then(res => res.json()),
+          fetch('/api/guilds').then(res => res.json()),
+          fetch('/api/admins').then(res => res.json()),
+        ]);
+
+        if (statusRes.success) setStats(statusRes.data);
+        if (guildsRes.success) setGuilds(guildsRes.data);
+        if (adminsRes.success) setAdmins(adminsRes.data);
+      } catch (error) {
+        console.error('Error al cargar datos del dashboard:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="p-8 text-white">Cargando panel de control...</div>;
+  }
+
+  return (
+    <div className="p-8 space-y-6 bg-slate-950 min-h-screen text-white">
+      <h1 className="text-3xl font-bold tracking-tight">🛡️ Panel de Control - Discord Bot</h1>
+
+      {/* Tarjetas de Estadísticas */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-6 bg-slate-900 rounded-xl border border-slate-800">
+          <h3 className="text-sm font-medium text-slate-400">Estado del Bot</h3>
+          <p className="text-2xl font-bold mt-2 text-green-400">
+            {stats?.online ? '🟢 En Línea' : '🔴 Desconectado'}
+          </p>
+          <span className="text-xs text-slate-500">Ping: {stats?.ping}ms</span>
+        </div>
+
+        <div className="p-6 bg-slate-900 rounded-xl border border-slate-800">
+          <h3 className="text-sm font-medium text-slate-400">Servidores Conectados</h3>
+          <p className="text-2xl font-bold mt-2">{stats?.guildsCount || 0}</p>
+        </div>
+
+        <div className="p-6 bg-slate-900 rounded-xl border border-slate-800">
+          <h3 className="text-sm font-medium text-slate-400">Admins Detectados</h3>
+          <p className="text-2xl font-bold mt-2 text-yellow-400">{admins.length}</p>
+        </div>
+      </div>
+
+      {/* Sección de Servidores */}
+      <div className="bg-slate-900 p-6 rounded-xl border border-slate-800">
+        <h2 className="text-xl font-semibold mb-4">Servidores Gestionados</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {guilds.map(guild => (
+            <div key={guild.id} className="p-4 bg-slate-950 rounded-lg border border-slate-800 flex items-center space-x-4">
+              {guild.icon ? (
+                <img src={guild.icon} alt={guild.name} className="w-12 h-12 rounded-full" />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center font-bold">
+                  {guild.name.charAt(0)}
+                </div>
+              )}
+              <div>
+                <h4 className="font-medium">{guild.name}</h4>
+                <span className="text-xs text-slate-400">👥 {guild.memberCount} miembros</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Sección de Administradores Auditados */}
+      <div className="bg-slate-900 p-6 rounded-xl border border-slate-800">
+        <h2 className="text-xl font-semibold mb-4">Auditoría de Administradores</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-slate-800 text-slate-400">
+              <tr>
+                <th className="pb-3">Usuario</th>
+                <th className="pb-3">ID</th>
+                <th className="pb-3">Roles</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800/50">
+              {admins.map(admin => (
+                <tr key={admin.id}>
+                  <td className="py-3 font-medium">{admin.userTag}</td>
+                  <td className="py-3 text-slate-400 font-mono text-xs">{admin.userId}</td>
+                  <td className="py-3 text-slate-300">{admin.roles}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
