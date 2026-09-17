@@ -166,7 +166,7 @@ client.on('interactionCreate', async (interaction) => {
       
       await db.insert(warns).values({
         id: `${interaction.guildId}-${Date.now()}`,
-        guildId: interaction.guildId!,
+        guildId: interaction.guildId,
         userId: user.id,
         moderatorId: interaction.user.id,
         reason: razon,
@@ -186,7 +186,7 @@ client.on('interactionCreate', async (interaction) => {
         const razon = interaction.options.getString('razon', true);
         await db.insert(blacklist).values({
           id: `${interaction.guildId}-${user.id}`,
-          guildId: interaction.guildId!,
+          guildId: interaction.guildId,
           userId: user.id,
           reason: razon,
         }).onConflictDoNothing();
