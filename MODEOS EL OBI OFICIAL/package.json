@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --import tsx server/index.ts",
     "dev": "tsx watch server/index.ts",
-    "build": "vite build client",
+    "build": "vite build",
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
@@ -14,7 +14,9 @@
     "express": "^4.19.2",
     "drizzle-orm": "^0.30.0",
     "postgres": "^3.4.4",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
@@ -23,6 +25,8 @@
     "drizzle-kit": "^0.20.14",
     "typescript": "^5.3.3",
     "vite": "^5.1.4",
-    "@vitejs/plugin-react": "^4.2.1"
+    "@vitejs/plugin-react": "^4.2.1",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19"
   }
 }
