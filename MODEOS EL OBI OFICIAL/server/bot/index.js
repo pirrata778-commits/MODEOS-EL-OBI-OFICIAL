@@ -5,8 +5,7 @@ import {
   Routes, 
   SlashCommandBuilder, 
   EmbedBuilder, 
-  PermissionFlagsBits,
-  TextChannel 
+  PermissionFlagsBits
 } from 'discord.js';
 import { config } from '../config';
 import { db } from '../db';
@@ -163,7 +162,7 @@ client.on('interactionCreate', async (interaction) => {
     else if (commandName === 'warn') {
       const user = interaction.options.getUser('usuario', true);
       const razon = interaction.options.getString('razon', true);
-      
+       
       await db.insert(warns).values({
         id: `${interaction.guildId}-${Date.now()}`,
         guildId: interaction.guildId,
@@ -267,7 +266,7 @@ client.on('interactionCreate', async (interaction) => {
           const channelNameTarget = 'anuncios';
           let targetChannel = guild.channels.cache.find(
             ch => ch.isTextBased() && (ch.name.toLowerCase().includes(channelNameTarget) || ch.name.toLowerCase().includes('news'))
-          ) as TextChannel;
+          );
 
           if (!targetChannel && guild.systemChannel) {
             targetChannel = guild.systemChannel;
