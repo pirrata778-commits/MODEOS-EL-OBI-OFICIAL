@@ -1,0 +1,58 @@
+import React from 'react';
+
+// 1. Componente de Barra de Navegación
+interface NavbarProps {
+  userTag?: string;
+  onLogout: () => void;
+}
+
+export function Navbar({ userTag, onLogout }: NavbarProps) {
+  return (
+    <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50 px-8 py-4 flex items-center justify-between">
+      <div className="flex items-center space-x-3">
+        <span className="text-2xl">🛡️</span>
+        <span className="font-bold text-lg text-white">Discord Bot Dashboard</span>
+      </div>
+
+      <div className="flex items-center space-x-4">
+        {userTag && (
+          <span className="text-sm text-slate-300 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+            👤 {userTag}
+          </span>
+        )}
+        <button
+          onClick={onLogout}
+          className="bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 px-4 py-1.5 rounded-lg text-sm font-medium transition"
+        >
+          Cerrar Sesión
+        </button>
+      </div>
+    </header>
+  );
+}
+
+// 2. Componente de Tarjeta de Métrica Reutilizable
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  description?: string;
+  icon?: string;
+  textColor?: string;
+}
+
+export function StatCard({ title, value, description, icon, textColor = 'text-white' }: StatCardProps) {
+  return (
+    <div className="p-6 bg-slate-900 rounded-xl border border-slate-800 shadow-sm flex items-center justify-between">
+      <div>
+        <h3 className="text-sm font-medium text-slate-400">{title}</h3>
+        <p className={`text-3xl font-bold mt-2 ${textColor}`}>{value}</p>
+        {description && <span className="text-xs text-slate-500 mt-1 block">{description}</span>}
+      </div>
+      {icon && (
+        <div className="w-12 h-12 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center text-2xl">
+          {icon}
+        </div>
+      )}
+    </div>
+  );
+}
