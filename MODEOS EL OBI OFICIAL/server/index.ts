@@ -26,15 +26,18 @@ app.get('/', (req, res) => {
 // 3. Método de Arranque del Servidor Central (Express + Bot)
 async function main() {
   try {
-    // Iniciar el servidor Express en el puerto configurado
-    const PORT = config.port || 3000;
-    app.listen(PORT, () => {
+    const PORT = Number(config.port) || 8081;
+
+    // OBLIGATORIO en Render: Añadir '0.0.0.0' para que sea accesible externamente
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`🌐 Servidor Express escuchando en el puerto ${PORT}`);
     });
 
-    // Iniciar el bot de Discord en el mismo proceso
+    // Iniciar el bot de Discord en segundo plano para no bloquear el inicio del servidor web
     console.log('🤖 Iniciando el cliente de Discord...');
-    await startBot();
+    startBot().catch(err => {
+      console.error('❌ Error al iniciar el bot de Discord:', err);
+    });
 
   } catch (error) {
     console.error('❌ Error crítico al iniciar la aplicación:', error);
@@ -43,4 +46,5 @@ async function main() {
 }
 
 // Ejecutar la aplicación completa
+main();la aplicación completa
 main();
