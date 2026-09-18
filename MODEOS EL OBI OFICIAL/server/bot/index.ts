@@ -13,6 +13,9 @@ import { warns, blacklist } from '../db/schema';
 import { scanAndNotifyAdmins } from './adminScanner';
 import { updateServerStats } from './statsChannels';
 
+// Función auxiliar de espera local para evitar límites de velocidad
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 // 1. Inicialización del Cliente de Discord
 export const client = new Client({
   intents: [
@@ -113,22 +116,25 @@ async function registerCommands() {
   }
 }
 
-// 4. Configuración de Eventos del Bot
+// 4. Configuración de Eventos del Bot (con pausas escalonadas)
 client.on('ready', async () => {
   console.log(`🤖 Bot conectado exitosamente como ${client.user?.tag}`);
   await registerCommands();
 
-  // Escanear servidores en busca de administradores y actualizar estadísticas al arrancar
+  // Escanear servidores con una pausa escalonada para evitar GatewayRateLimitError
   for (const [_, guild] of client.guilds.cache) {
     await scanAndNotifyAdmins(guild);
     await updateServerStats(guild);
+    await wait(6000); // Pausa de 6 segundos entre cada servidor al iniciar
   }
+  console.log('✅ Todos los servidores han sido procesados correctamente al arrancar.');
 });
 
 // Evento cuando el bot se une a un nuevo servidor
 client.on('guildCreate', async (guild) => {
   console.log(`🤖 El bot se ha unido a un nuevo servidor: ${guild.name}`);
   await scanAndNotifyAdmins(guild);
+  await wait(3000);
   await updateServerStats(guild);
 });
 
