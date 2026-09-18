@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Discord Bot & Express Dashboard Monorepo",
   "main": "server/index.ts",
-  "scripts": {
+ "scripts": {
     "start": "node --import tsx server/index.ts",
     "dev": "tsx watch server/index.ts",
-    "build": "vite build",
+    "build": "cd client && npm install && npm run build && cd .. && tsc",
     "db:push": "drizzle-kit push:pg"
   },
   "dependencies": {
