@@ -11,11 +11,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 2. Montaje de Rutas de la API y Autenticación
+// 2. Rutas principales
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 
-// Ruta base de prueba para comprobar el estado del servidor web
+// Ruta de estado
 app.get('/', (req, res) => {
   res.json({
     success: true,
@@ -23,28 +23,15 @@ app.get('/', (req, res) => {
   });
 });
 
-// 3. Método de Arranque del Servidor Central (Express + Bot)
-async function main() {
-  try {
-    const PORT = Number(config.port) || 8081;
+const PORT = Number(process.env.PORT || config.port) || 8081;
 
-    // OBLIGATORIO en Render: Añadir '0.0.0.0' para que sea accesible externamente
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🌐 Servidor Express escuchando en el puerto ${PORT}`);
-    });
-
-    // Iniciar el bot de Discord en segundo plano para no bloquear el inicio del servidor web
-    console.log('🤖 Iniciando el cliente de Discord...');
-    startBot().catch(err => {
-      console.error('❌ Error al iniciar el bot de Discord:', err);
-    });
-
-  } catch (error) {
-    console.error('❌ Error crítico al iniciar la aplicación:', error);
-    process.exit(1);
-  }
-}
-
-// Ejecutar la aplicación completa
-main();la aplicación completa
-main();
+// 3. LEVANTAR EXPRESS DE INMEDIATO (Vital para Render)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🌐 Servidor Express escuchando en el puerto ${PORT}`);
+  
+  // 4. Iniciar el bot de Discord en segundo plano UNA VEZ QUE EL PUERTO ESTÁ ABIERTO
+  console.log('🤖 Iniciando el cliente de Discord en segundo plano...');
+  startBot().catch(err => {
+    console.error('❌ Error al iniciar el bot de Discord:', err);
+  });
+});
