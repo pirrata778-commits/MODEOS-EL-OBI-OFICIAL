@@ -28,8 +28,8 @@ app.get('/api-status', (req, res) => {
   });
 });
 
-// 3. Servir el Frontend de React (Vite)
-const clientDistPath = path.resolve(__dirname, '../client/dist');
+// 3. Servir el Frontend de React (Vite compila a ../dist/public según tu vite.config.ts)
+const clientDistPath = path.resolve(__dirname, '../dist/public');
 app.use(express.static(clientDistPath));
 
 // Cualquier otra ruta cargará la interfaz web de React
