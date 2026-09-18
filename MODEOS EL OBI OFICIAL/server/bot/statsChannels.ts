@@ -2,8 +2,10 @@ import { Guild, ChannelType, PermissionFlagsBits, VoiceChannel } from 'discord.j
 
 export async function updateServerStats(guild: Guild) {
   try {
-    // 1. Asegurar que los miembros del servidor están cacheados
-    await guild.members.fetch();
+    // 1. Asegurar que los miembros del servidor están cacheados de forma segura
+    await guild.members.fetch({ time: 60000 }).catch(err => {
+      console.warn(`⚠️ No se pudieron descargar todos los miembros para estadísticas en ${guild.name}, usando caché disponible:`, err.message);
+    });
 
     // 2. Calcular las métricas exactas
     const totalMembers = guild.memberCount;
