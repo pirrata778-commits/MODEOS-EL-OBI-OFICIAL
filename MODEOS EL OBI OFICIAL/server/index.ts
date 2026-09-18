@@ -32,7 +32,7 @@ app.get('/api-status', (req, res) => {
 const clientDistPath = path.resolve(__dirname, '../client/dist');
 app.use(express.static(clientDistPath));
 
-// Cualquier otra ruta que no sea /api o /auth cargará la interfaz gráfica de la web
+// Cualquier otra ruta cargará la interfaz web de React
 app.get('*', (req, res) => {
   res.sendFile(path.join(clientDistPath, 'index.html'));
 });
