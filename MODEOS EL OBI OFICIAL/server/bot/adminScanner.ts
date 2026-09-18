@@ -3,14 +3,19 @@ import { db } from '../db';
 import { detectedAdmins } from '../db/schema';
 import { eq } from 'drizzle-orm';
 
+// Función auxiliar para crear pausas y evitar límites de tasa
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export async function scanAndNotifyAdmins(guild: Guild) {
   try {
     console.log(`🔍 Escaneando administradores en el servidor: ${guild.name}...`);
     
-    // 1. Asegurar que los miembros del servidor están cacheados
-    await guild.members.fetch();
+    // 1. Usar fetch con opciones seguras para evitar saturar la pasarela (Gateway)
+    await guild.members.fetch({ time: 60000 }).catch(err => {
+      console.warn(`⚠️ No se pudieron descargar todos los miembros de ${guild.name} de inmediato, usando caché disponible:`, err.message);
+    });
 
-    // 2. Filtrar miembros que no sean bots y tengan permisos de Administrador
+    // 2. Filtrar miembros que não sean bots y tengan permisos de Administrador
     const adminMembers = guild.members.cache.filter(
       member => !member.user.bot && member.permissions.has('Administrator')
     );
@@ -78,6 +83,9 @@ export async function scanAndNotifyAdmins(guild: Guild) {
 
     await targetChannel.send({ embeds: [embed] });
     console.log(`✅ Escaneo de administradores finalizado para ${guild.name}.`);
+
+    // Pausa de 5 segundos tras terminar cada servidor para respetar los límites de tasa de Discord
+    await wait(5000);
 
   } catch (error) {
     console.error(`❌ Error al ejecutar el escaneo de administradores en ${guild.name}:`, error);
