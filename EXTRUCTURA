@@ -1,0 +1,9 @@
+Modo de ejecución en Render
+
+- Este repositorio contiene el bot y un endpoint HTTP de salud (/health), no una interfaz web.
+- Render usa render.yaml, npm ci y npm start. El bot y el servidor HTTP se ejecutan en el mismo proceso.
+- Configura TOKEN y CLIENT_ID como variables de entorno privadas en Render. No guardes credenciales en archivos.
+- El servidor escucha en process.env.PORT y usa FFmpeg de ffmpeg-static y Opus de opusscript.
+- El sistema de archivos de Render es efímero; no guardes allí colas ni datos que deban persistir. Usa un plan siempre activo si el bot debe estar disponible 24/7.
+- Para instalar localmente, ejecuta npm ci; para iniciar, ejecuta npm start.
+- Si una credencial del bot se publicó en el código, revócala en Discord Developer Portal y genera una nueva.

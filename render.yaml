@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: modeos-el-obi-musica
+    runtime: node
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: TOKEN
+        sync: false
+      - key: CLIENT_ID
+        sync: false
