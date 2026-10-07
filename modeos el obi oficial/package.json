@@ -1,0 +1,23 @@
+{
+  "name": "modeos-el-obi-official",
+  "version": "1.0.0",
+  "description": "Bot MODEOS EL OBI OFFICIAL en Render con Neon DB",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.3"
+  },
+  "optionalDependencies": {
+    "@napi-rs/canvas": "^0.1.80"
+  }
+}

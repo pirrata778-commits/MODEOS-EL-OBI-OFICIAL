@@ -1,0 +1,25 @@
+modeos-el-obi-official/
+├── package.json
+├── .env
+├── index.js
+├── deploy-commands.js
+├── config/
+│   └── database.js
+└── src/
+    ├── bot/
+    │   ├── client.js
+    │   ├── commands/
+    │   │   ├── adminScanner.js
+    │   │   ├── announce.js
+    │   │   ├── verify.js
+    │   │   └── warn.js
+    │   └── events/
+    │       ├── guildMemberAdd.js
+    │       ├── guildMemberUpdate.js
+    │       ├── interactionCreate.js
+    │       └── ready.js
+    └── web/
+        ├── server.js
+        └── routes/
+            ├── api.js
+            └── auth.js
